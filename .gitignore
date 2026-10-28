@@ -1,0 +1,36 @@
+# Secretos y variables de entorno
+.env
+.env.*
+!.env.example
+*.pfx
+*.p12
+
+# .NET
+[Bb]in/
+[Oo]bj/
+TestResults/
+*.user
+*.suo
+
+# Node.js y frontend
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+
+# Bases de datos SQLite locales
+*.db
+*.db-shm
+*.db-wal
+
+# IDE y sistema operativo
+.vs/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.log
