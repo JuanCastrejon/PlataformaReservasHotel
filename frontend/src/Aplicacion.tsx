@@ -44,18 +44,24 @@ export default function Aplicacion() {
     }
   }
 
-  const manejarCotizacion = async (tipoHabitacion: string) => {
+  const manejarCotizacion = async (tipoHabitacion: string, capacidadMaxima?: number) => {
     if (!parametrosActuales) return
 
     setCotizandoTipo(tipoHabitacion)
+    setError(null)
+
     try {
+      const cantidadHabitaciones = capacidadMaxima
+        ? Math.max(1, Math.ceil(parametrosActuales.numeroHuespedes / capacidadMaxima))
+        : 1
+
       const resultadoCotizacion = await cotizarEstadia({
         sedeId: parametrosActuales.sedeId,
         tipoHabitacion,
         fechaEntrada: parametrosActuales.fechaEntrada,
         fechaSalida: parametrosActuales.fechaSalida,
         numeroHuespedes: parametrosActuales.numeroHuespedes,
-        cantidadHabitaciones: 1,
+        cantidadHabitaciones,
       })
       setCotizacion(resultadoCotizacion)
     } catch (err: unknown) {

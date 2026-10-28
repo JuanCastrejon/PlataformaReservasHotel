@@ -118,7 +118,15 @@ export function FormularioBusqueda({ onBuscar, cargando }: PropsFormularioBusque
               className="control-entrada"
               value={fechaEntrada}
               min={hoy}
-              onChange={(e) => setFechaEntrada(e.target.value)}
+              onChange={(e) => {
+                const nuevaEntrada = e.target.value
+                setFechaEntrada(nuevaEntrada)
+                if (nuevaEntrada && fechaSalida <= nuevaEntrada) {
+                  const fecha = new Date(`${nuevaEntrada}T00:00:00`)
+                  fecha.setDate(fecha.getDate() + 1)
+                  setFechaSalida(fecha.toISOString().split('T')[0])
+                }
+              }}
               disabled={cargando}
               required
             />

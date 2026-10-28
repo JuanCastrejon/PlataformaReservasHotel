@@ -7,7 +7,7 @@ interface PropsPanelResultados {
   error: ErrorApi | null
   cotizacionSeleccionada: CotizacionEstadiaDto | null
   cotizandoTipo: string | null
-  onCotizar: (tipo: string) => void
+  onCotizar: (tipo: string, capacidadMaxima: number) => void
   onCerrarCotizacion: () => void
 }
 
@@ -33,7 +33,20 @@ export function PanelResultados({
         )}
       </div>
 
-      {estado === 'inactivo' && (
+      {error && (
+        <div className="alerta alerta-error-servidor" role="alert">
+          <div className="icono-alerta" aria-hidden="true">❌</div>
+          <div className="alerta-cuerpo">
+            <h3 className="alerta-titulo">No se pudo completar la operación</h3>
+            <p className="alerta-mensaje">{error.mensaje}</p>
+            {error.codigo && (
+              <span className="badge-codigo-error">Código: {error.codigo}</span>
+            )}
+          </div>
+        </div>
+      )}
+
+      {estado === 'inactivo' && !error && (
         <div className="estado-caja estado-inactivo">
           <div className="icono-estado" aria-hidden="true">🏨</div>
           <h3>Listo para buscar</h3>
@@ -51,20 +64,7 @@ export function PanelResultados({
         </div>
       )}
 
-      {estado === 'error' && error && (
-        <div className="alerta alerta-error-servidor" role="alert">
-          <div className="icono-alerta" aria-hidden="true">❌</div>
-          <div className="alerta-cuerpo">
-            <h3 className="alerta-titulo">No se pudo completar la consulta</h3>
-            <p className="alerta-mensaje">{error.mensaje}</p>
-            {error.codigo && (
-              <span className="badge-codigo-error">Código: {error.codigo}</span>
-            )}
-          </div>
-        </div>
-      )}
-
-      {estado === 'vacio' && (
+      {estado === 'vacio' && !error && (
         <div className="estado-caja estado-vacio" role="status">
           <div className="icono-estado" aria-hidden="true">📭</div>
           <h3>Sin disponibilidad para los criterios seleccionados</h3>
@@ -121,7 +121,7 @@ export function PanelResultados({
                     <div className="habitacion-acciones">
                       <button
                         type="button"
-                        onClick={() => onCotizar(item.tipoHabitacion)}
+                        onClick={() => onCotizar(item.tipoHabitacion, item.capacidadMaxima)}
                         className={`boton-cotizar ${estaSeleccionada ? 'activo' : ''}`}
                         disabled={estaCotizando}
                         aria-busy={estaCotizando}
